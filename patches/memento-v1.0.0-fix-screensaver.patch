@@ -1,0 +1,15 @@
+diff --git a/src/gui/widgets/mpvwidget.cpp b/src/gui/widgets/mpvwidget.cpp
+index 7e52944..7d926a5 100644
+--- a/src/gui/widgets/mpvwidget.cpp
++++ b/src/gui/widgets/mpvwidget.cpp
+@@ -818,7 +818,9 @@ void MpvWidget::preventScreenDimming()
+     );
+ #elif defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
+     QDBusInterface screenSaver(
+-        "org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver"
++        "org.freedesktop.ScreenSaver",
++        "/ScreenSaver",
++        "org.freedesktop.ScreenSaver"
+     );
+     QDBusMessage reply = screenSaver.call(
+         "Inhibit", "ripose.memento", "Playing a video"

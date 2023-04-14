@@ -19,6 +19,7 @@ finish-args:
   - --filesystem=host:ro
   - --env=LC_NUMERIC=C
   - --filesystem=xdg-run/pipewire-0:ro
+  - --talk-name=org.freedesktop.ScreenSaver
 
 modules:
   - name: libXmu
@@ -568,5 +569,7 @@ modules:
           tag-pattern: ^v([\d.]+)$
       - type: file
         path: io.github.ripose_jp.Memento.appdata.xml
+      - type: patch
+        path: patches/memento-v1.0.0-fix-screensaver.patch
     post-install:
       - install -Dm644 $FLATPAK_ID.appdata.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
