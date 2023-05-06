@@ -25,9 +25,13 @@ modules:
   - name: libXmu
     buildsystem: autotools
     sources:
-      - type: archive
-        url: https://github.com/freedesktop/libXmu/archive/libXmu-1.1.2.tar.gz
-        sha256: fb1485a0ffcc360c0cc8fe18f54a2f49af6fc384da743c0b136ab99cc6c6e54c
+      - type: git
+        url: https://gitlab.freedesktop.org/xorg/lib/libxmu.git
+        tag: libXmu-1.1.4
+        commit: b29c739b577ee142877e69eb3fb07c7312d81557
+        x-checker-data:
+          type: git
+          tag-pattern: ^libXmu-([\d.]+)$
 
   - name: xclip
     buildsystem: autotools
@@ -562,20 +566,21 @@ modules:
 
   - name: memento
     buildsystem: cmake-ninja
+    builddir: true
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DRELEASE_BUILD=ON
     sources:
       - type: git
         url: https://github.com/ripose-jp/Memento.git
-        tag: v1.0.0
-        commit: 2a6eeaa97c18d24fe625cd8552effd43051ac5ac
+        tag: v1.1.0
+        commit: bc1d288c98aff5c98349bcc5a4901f2511cef22b
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
       - type: file
         path: io.github.ripose_jp.Memento.appdata.xml
       - type: patch
-        path: patches/memento-v1.0.0-fix-screensaver.patch
+        path: patches/memento-v1.1.0-fix-screensaver.patch
     post-install:
-      - install -Dm644 $FLATPAK_ID.appdata.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
+      - install -Dm644 $FLATPAK_BUILDER_BUILDDIR/$FLATPAK_ID.appdata.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
