@@ -73,8 +73,8 @@ modules:
       - install yt-dlp /app/bin
     sources:
       - type: archive
-        url: https://github.com/yt-dlp/yt-dlp/releases/download/2023.03.04/yt-dlp.tar.gz
-        sha256: 771d2abefcd5f1e6f3ab6d6d18cdae98be4ab73538d1174e7e7236640418e150
+        url: https://github.com/yt-dlp/yt-dlp/releases/download/2023.06.22/yt-dlp.tar.gz
+        sha256: 5291eb8e077ee1bc2585f4f522d75f1e4f9fd4c3374bace1572cf59b97bdd9c3
         x-checker-data:
           type: json
           url: https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest
@@ -409,8 +409,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/vapoursynth/vapoursynth.git
-        tag: R62
-        commit: d10c0d3ebb7b32110e6c5c0e998c4028ead45bdb
+        tag: R63
+        commit: f7f4e42193b25edaf35042795b39c80173e1b55e
         x-checker-data:
           type: git
           tag-pattern: ^R([\d.]+)$
