@@ -73,8 +73,8 @@ modules:
       - install yt-dlp /app/bin
     sources:
       - type: archive
-        url: https://github.com/yt-dlp/yt-dlp/releases/download/2023.03.04/yt-dlp.tar.gz
-        sha256: 771d2abefcd5f1e6f3ab6d6d18cdae98be4ab73538d1174e7e7236640418e150
+        url: https://github.com/yt-dlp/yt-dlp/releases/download/2023.07.06/yt-dlp.tar.gz
+        sha256: 6d2115b84b6c11867f92cf4c23705b536bfa0ba9d538b1885f52da6756f8c980
         x-checker-data:
           type: json
           url: https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest
@@ -231,8 +231,8 @@ modules:
     sources:
       - type: archive
         archive-type: tar
-        url: https://api.github.com/repos/sekrit-twc/zimg/tarball/release-3.0.4
-        sha256: c86b5a169b22c562172a11d83ce76a82dbdafc82149edcb8a06d0beeb94b193e
+        url: https://api.github.com/repos/sekrit-twc/zimg/tarball/release-3.0.5
+        sha256: 1b8998f03f4a49e4d730033143722b32bc28a5306ef809ccfb3b4bbb29e4b784
         x-checker-data:
           type: json
           url: https://api.github.com/repos/sekrit-twc/zimg/releases/latest
@@ -409,8 +409,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/vapoursynth/vapoursynth.git
-        tag: R62
-        commit: d10c0d3ebb7b32110e6c5c0e998c4028ead45bdb
+        tag: R63
+        commit: f7f4e42193b25edaf35042795b39c80173e1b55e
         x-checker-data:
           type: git
           tag-pattern: ^R([\d.]+)$
@@ -506,8 +506,8 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.9.2.tar.xz
-        sha256: c93e9852b7b2dc931197831438fee5295976ee0ba24f8524a8907be5c2ba5937
+        url: https://libzip.org/download/libzip-1.10.0.tar.xz
+        sha256: cd2a7ac9f1fb5bfa6218272d9929955dc7237515bba6e14b5ad0e1d1e2212b43
         x-checker-data:
           type: anitya
           project-id: 10649
