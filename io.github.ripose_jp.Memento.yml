@@ -70,8 +70,8 @@ modules:
     sources:
       - type: archive
         archive-type: tar
-        url: https://download.samba.org/pub/samba/stable/samba-4.19.4.tar.gz
-        sha256: 4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c
+        url: https://download.samba.org/pub/samba/stable/samba-4.19.5.tar.gz
+        sha256: 0e2405b4cec29d0459621f4340a1a74af771ec7cffedff43250cad7f1f87605e
         x-checker-data:
           type: html
           url: https://download.samba.org/pub/samba/stable/?C=M;O=D
@@ -124,7 +124,7 @@ modules:
         mirror-urls:
           - https://luajit.org/git/luajit.git
         disable-shallow-clone: true
-        commit: 343ce0edaf3906a62022936175b2f5410024cbfc
+        commit: 0d313b243194a0b8d2399d8b549ca5a0ff234db5
         x-checker-data:
           type: json
           url: https://api.github.com/repos/LuaJIT/LuaJIT/commits
@@ -405,7 +405,7 @@ modules:
     sources:
       - type: git
         url: https://code.videolan.org/videolan/x264.git
-        commit: 4815ccadb1890572f2bf8b9d9553d56f6c9122ad
+        commit: be4f0200ed007c466fd96185c39cde2a2d60ef50
         # Every commit to the master branch is considered a release
         # https://code.videolan.org/videolan/x264/-/issues/35
         x-checker-data:
@@ -478,8 +478,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/libjxl/libjxl.git
-        tag: v0.9.1
-        commit: b8ceae3a6e9d0ffd9efebcbdd04322fcfc502eed
+        tag: v0.10.1
+        commit: 5f67ebced96df5c0696ec7d1822bdd3e4e11a1a1
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -658,8 +658,8 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.10.0.tar.xz
-        sha256: cd2a7ac9f1fb5bfa6218272d9929955dc7237515bba6e14b5ad0e1d1e2212b43
+        url: https://libzip.org/download/libzip-1.10.1.tar.xz
+        sha256: dc3c8d5b4c8bbd09626864f6bcf93de701540f761d76b85d7c7d710f4bd90318
         x-checker-data:
           type: anitya
           project-id: 10649
