@@ -688,7 +688,7 @@ modules:
       - /bin
       - /include
       - /libexec/mecab/mecab-*
-    build-options:
+    config-opts:
       - --with-charset=utf-8
     sources:
       - type: archive
@@ -705,7 +705,7 @@ modules:
       - /bin
       - /include
       - /libexec/mecab/mecab-*
-    build-options:
+    config-opts:
       - --with-charset=utf-8
     sources:
       - type: archive
