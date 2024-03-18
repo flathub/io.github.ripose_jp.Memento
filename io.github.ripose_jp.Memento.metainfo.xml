@@ -5,6 +5,9 @@
  <project_license>GPL-2.0</project_license>
  <name>memento</name>
  <summary>An mpv-based video player for studying Japanese</summary>
+ <developer id="io.github.ripose_jp">
+  <name>Ripose</name>
+ </developer>
  <launchable type="desktop-id">io.github.ripose_jp.Memento.desktop</launchable>
  <translation type="gettext">memento</translation>
  <content_rating type="oars-1.1" />

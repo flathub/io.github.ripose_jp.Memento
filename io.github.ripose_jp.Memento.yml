@@ -731,8 +731,8 @@ modules:
           type: git
           tag-pattern: ^v([\d.]+)$
       - type: file
-        path: io.github.ripose_jp.Memento.appdata.xml
+        path: io.github.ripose_jp.Memento.metainfo.xml
       - type: patch
         path: patches/memento-fix-screensaver.patch
     post-install:
-      - install -Dm644 $FLATPAK_BUILDER_BUILDDIR/$FLATPAK_ID.appdata.xml /app/share/metainfo/$FLATPAK_ID.appdata.xml
+      - install -Dm644 $FLATPAK_BUILDER_BUILDDIR/$FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.metainfo.xml
