@@ -70,8 +70,8 @@ modules:
     sources:
       - type: archive
         archive-type: tar
-        url: https://download.samba.org/pub/samba/stable/samba-4.20.2.tar.gz
-        sha256: f969ffed58ccf3e85cbbcc0e33a1726d025c2b40f42a653b1125b82b92d2e0e5
+        url: https://download.samba.org/pub/samba/stable/samba-4.20.3.tar.gz
+        sha256: afd5a9bb03e5c921c4c1d4e4b4fa6ea16cf798d94e5e5bffb9fd61716641cf30
         x-checker-data:
           type: html
           url: https://download.samba.org/pub/samba/stable/?C=M;O=D
@@ -124,7 +124,7 @@ modules:
         mirror-urls:
           - https://luajit.org/git/luajit.git
         disable-shallow-clone: true
-        commit: 93e87998b24021b94de8d1c8db244444c46fb6e9
+        commit: 04dca7911ea255f37be799c18d74c305b921c1a6
         x-checker-data:
           type: json
           url: https://api.github.com/repos/LuaJIT/LuaJIT/commits
@@ -145,8 +145,8 @@ modules:
       - install yt-dlp /app/bin
     sources:
       - type: archive
-        url: https://github.com/yt-dlp/yt-dlp/releases/download/2024.07.02/yt-dlp.tar.gz
-        sha256: 1094af3a5827a6a31269b97bd701456269af18595427c9905f3ffbe1a11582a0
+        url: https://github.com/yt-dlp/yt-dlp/releases/download/2024.08.01/yt-dlp.tar.gz
+        sha256: 9ddf1082359431dadb8cc78c91b04bfd8308a2c2fc2c51573a7936e558dca327
         x-checker-data:
           type: json
           url: https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest
@@ -204,8 +204,8 @@ modules:
         url: https://git.linuxtv.org/v4l-utils.git
         mirror-urls:
           - https://github.com/gjasny/v4l-utils.git
-        tag: v4l-utils-1.26.1
-        commit: 4aee01a027923cab1e40969f56f8ba58d3e6c0d1
+        tag: v4l-utils-1.28.1
+        commit: fc15e229d9d337e46d730f00647821adbbd58548
         x-checker-data:
           type: git
           tag-pattern: ^v4l-utils-([\d.]+)$
@@ -240,12 +240,12 @@ modules:
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://ftp.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
+        url: https://ftp.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.2.tar.bz2
         mirror-urls:
           - https://mirrors.kernel.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
           - https://mirrors.ocf.berkeley.edu/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
           - https://ftpmirror.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
-        sha256: 33b1cf305ccfbfd03b43936975615000ce538b119989c4bec469577570b60e8a
+        sha256: 186892539dedd661276014d71318c8c8f97ecb1250a86625256abd4defbf0d0c
         x-checker-data:
           type: html
           url: https://ftp.gnu.org/gnu/libcdio/
@@ -574,8 +574,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/vapoursynth/vapoursynth.git
-        tag: R68
-        commit: 18bf017f8e6fac14b2fdb6a6d0c6e44c6686e4f3
+        tag: R69
+        commit: 2804ed7a4926863f4a12e879d95155c4b05ecdf3
         x-checker-data:
           type: git
           tag-pattern: ^R([\d.]+)$
