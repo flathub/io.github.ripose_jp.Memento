@@ -70,8 +70,8 @@ modules:
     sources:
       - type: archive
         archive-type: tar
-        url: https://download.samba.org/pub/samba/stable/samba-4.20.2.tar.gz
-        sha256: f969ffed58ccf3e85cbbcc0e33a1726d025c2b40f42a653b1125b82b92d2e0e5
+        url: https://download.samba.org/pub/samba/stable/samba-4.21.2.tar.gz
+        sha256: bde66be3d2025cb949de38518ad2652f3795f824c7fa89d4e443ede1ae828ea6
         x-checker-data:
           type: html
           url: https://download.samba.org/pub/samba/stable/?C=M;O=D
@@ -124,7 +124,7 @@ modules:
         mirror-urls:
           - https://luajit.org/git/luajit.git
         disable-shallow-clone: true
-        commit: 93e87998b24021b94de8d1c8db244444c46fb6e9
+        commit: f73e649a954b599fc184726c376476e7a5c439ca
         x-checker-data:
           type: json
           url: https://api.github.com/repos/LuaJIT/LuaJIT/commits
@@ -145,8 +145,8 @@ modules:
       - install yt-dlp /app/bin
     sources:
       - type: archive
-        url: https://github.com/yt-dlp/yt-dlp/releases/download/2024.07.02/yt-dlp.tar.gz
-        sha256: 1094af3a5827a6a31269b97bd701456269af18595427c9905f3ffbe1a11582a0
+        url: https://github.com/yt-dlp/yt-dlp/releases/download/2024.12.23/yt-dlp.tar.gz
+        sha256: 66a5b9e0988106a3131ce40f61f04af3eb49cde4d26dd292793ad18666cc5938
         x-checker-data:
           type: json
           url: https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest
@@ -179,6 +179,9 @@ modules:
       - /lib/pkgconfig
     config-opts:
       - --disable-static
+      - --enable-asm
+      - --enable-harfbuzz
+      - --enable-fontconfig
     sources:
       - type: git
         url: https://github.com/libass/libass.git
@@ -240,12 +243,12 @@ modules:
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://ftp.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
+        url: https://ftp.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.2.tar.bz2
         mirror-urls:
           - https://mirrors.kernel.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
           - https://mirrors.ocf.berkeley.edu/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
           - https://ftpmirror.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
-        sha256: 33b1cf305ccfbfd03b43936975615000ce538b119989c4bec469577570b60e8a
+        sha256: 186892539dedd661276014d71318c8c8f97ecb1250a86625256abd4defbf0d0c
         x-checker-data:
           type: html
           url: https://ftp.gnu.org/gnu/libcdio/
@@ -359,8 +362,8 @@ modules:
         url: https://github.com/breakfastquay/rubberband.git
         mirror-urls:
           - https://hg.sr.ht/~breakfastquay/rubberband
-        tag: v3.3.0
-        commit: 2be46b0dffb13273a67396c77bc9278736bb03d2
+        tag: v4.0.0
+        commit: 1d95888bec3ae0a17c0c4af791810d5a63f6bc35
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
@@ -416,10 +419,8 @@ modules:
       - --enable-shared
     sources:
       - type: git
-        url: https://github.com/jpsdr/x264
-        mirror-urls:
-          - https://code.videolan.org/videolan/x264.git
-        commit: 4613ac3c15fd75cebc4b9f65b7fb95e70a3acce1
+        url: https://code.videolan.org/videolan/x264.git
+        commit: 450946f96bb20ca3f71d494c0800c3ad747de769
         # Every commit to the master branch is considered a release
         # https://code.videolan.org/videolan/x264/-/issues/35
         x-checker-data:
@@ -442,8 +443,8 @@ modules:
     sources:
       - type: git
         url: https://bitbucket.org/multicoreware/x265_git.git
-        tag: '3.6'
-        commit: aa7f602f7592eddb9d87749be7466da005b556ee
+        tag: '4.0'
+        commit: 6318f223684118a2c71f67f3f4633a9e35046b00
         x-checker-data:
           type: git
           tag-pattern: ^([\d.]+)$
@@ -454,8 +455,8 @@ modules:
       - -DBUILD_TESTS=OFF
     sources:
       - type: git
-        commit: 33974839677da7044ef5a70be7ad5550735aae6e
-        tag: v1.3.2
+        commit: 444d2c1d7ececf5cc2d96d3b17b209047b02318d
+        tag: v1.3.3
         url: https://github.com/hoene/libmysofa.git
         x-checker-data:
           type: git
@@ -478,7 +479,6 @@ modules:
           url: https://sourceforge.net/projects/bs2b/files/libbs2b/
           version-pattern: projects/bs2b/files/libbs2b/(\d+\.\d+\.\d+)
           url-template: https://downloads.sourceforge.net/sourceforge/bs2b/libbs2b-$version.tar.gz
-      # https://src.fedoraproject.org/rpms/libbs2b/blob/rawhide/f/libbs2b.spec#_40
       - type: shell
         commands:
           - sed -i -e 's/lzma/xz/g' configure.ac
@@ -492,19 +492,12 @@ modules:
     sources:
       - type: git
         url: https://github.com/libjxl/libjxl.git
-        tag: v0.10.3
-        commit: 4a3b22d2600f92d8706fb72d85d52bfee2acbd54
+        tag: v0.11.1
+        commit: 794a5dcf0d54f9f0b20d288a12e87afb91d20dfc
         disable-shallow-clone: true
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
-
-  - name: vulkan-headers
-    buildsystem: cmake-ninja
-    sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/Vulkan-Headers/archive/v1.3.286.tar.gz
-        sha256: a82a6982efe5e603e23505ca19b469e8f3d876fc677c46b7bfb6177f517bf8fe
 
   - name: ffmpeg
     cleanup:
@@ -538,15 +531,13 @@ modules:
       - --enable-libwebp
       - --enable-libsmbclient
       - --enable-libxml2
-      - --enable-vulkan
-
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
         mirror-urls:
           - https://git.ffmpeg.org/ffmpeg.git
-        commit: af25a4bfd2503caf3ee485b27b99b620302f5718
-        tag: n7.0.1
+        commit: b08d7969c550a804a59511c7b83f2dd8cc0499b8
+        tag: n7.1
         x-checker-data:
           type: git
           tag-pattern: ^n([\d.]{3,7})$
@@ -567,24 +558,13 @@ modules:
           url-query: .[0].tarball_url
           version-query: .[0].name
 
-  - name: vapoursynth
-    config-opts:
-      - --disable-static
-      - --with-python_prefix=/app
-    sources:
-      - type: git
-        url: https://github.com/vapoursynth/vapoursynth.git
-        tag: R68
-        commit: 18bf017f8e6fac14b2fdb6a6d0c6e44c6686e4f3
-        x-checker-data:
-          type: git
-          tag-pattern: ^R([\d.]+)$
-
   - name: libplacebo
     buildsystem: meson
     config-opts:
-      - -Dvulkan=enabled
-      - -Dshaderc=enabled
+      - -Dopengl=enabled
+      - -Dvulkan=disabled
+      - -Dshaderc=disabled
+      - -Dglslang=disabled
     cleanup:
       - /include
       - /lib/pkgconfig
@@ -598,53 +578,6 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
-    modules:
-      - name: shaderc
-        buildsystem: cmake-ninja
-        builddir: true
-        config-opts:
-          - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
-          - -DSHADERC_SKIP_EXAMPLES=ON
-          - -DSHADERC_SKIP_TESTS=ON
-          - -DSPIRV_SKIP_EXECUTABLES=ON
-          - -DENABLE_GLSLANG_BINARIES=OFF
-        cleanup:
-          - /bin
-          - /include
-          - /lib/cmake
-          - /lib/pkgconfig
-        sources:
-          - type: git
-            url: https://github.com/google/shaderc.git
-            #tag: v2023.7
-            commit: 40bced4e1e205ecf44630d2dfa357655b6dabd04
-            #x-checker-data:
-            #  type: git
-            #  tag-pattern: ^v(\d{4}\.\d{1,2})$
-          - type: git
-            url: https://github.com/KhronosGroup/SPIRV-Tools.git
-            tag: v2024.1
-            commit: 04896c462d9f3f504c99a4698605b6524af813c1
-            dest: third_party/spirv-tools
-            #x-checker-data:
-            #  type: git
-            #  tag-pattern: ^v(\d{4}\.\d{1})$
-          - type: git
-            url: https://github.com/KhronosGroup/SPIRV-Headers.git
-            #tag: sdk-1.3.250.1
-            commit: 4f7b471f1a66b6d06462cd4ba57628cc0cd087d7
-            dest: third_party/spirv-headers
-            #x-checker-data:
-            #  type: git
-            #  tag-pattern: ^sdk-([\d.]+)$
-          - type: git
-            url: https://github.com/KhronosGroup/glslang.git
-            tag: 14.3.0
-            commit: fa9c3deb49e035a8abcabe366f26aac010f6cbfb
-            dest: third_party/glslang
-            x-checker-data:
-              type: git
-              tag-pattern: ^(\d{1,2}\.\d{1,2}\.\d{1,4})$
 
   - name: mpv
     buildsystem: meson
@@ -657,8 +590,7 @@ modules:
       - -Ddvdnav=enabled
       - -Dlibarchive=enabled
       - -Dsdl2=enabled
-      - -Dvulkan=enabled
-      - -Dvulkan-interop=enabled
+      - -Dvulkan=disabled
     cleanup:
       - /bin
       - /include
@@ -667,8 +599,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/mpv-player/mpv.git
-        tag: v0.38.0
-        commit: 02254b92dd237f03aa0a151c2a68778c4ea848f9
+        tag: v0.39.0
+        commit: a0fba7be57f3822d967b04f0f6b6d6341e7516e7
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
@@ -681,8 +613,8 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.10.1.tar.xz
-        sha256: dc3c8d5b4c8bbd09626864f6bcf93de701540f761d76b85d7c7d710f4bd90318
+        url: https://libzip.org/download/libzip-1.11.2.tar.gz
+        sha256: 6b2a43837005e1c23fdfee532b78f806863e412d2089b9c42b49ab08cbcd7665
         x-checker-data:
           type: anitya
           project-id: 10649
@@ -698,8 +630,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/json-c/json-c.git
-        tag: json-c-0.17-20230812
-        commit: b4c371fa0cbc4dcbaccc359ce9e957a22988fb34
+        tag: json-c-0.18-20240915
+        commit: 41a55cfcedb54d9c1874f2f0eb07b504091d7e37
         x-checker-data:
           type: git
           url: https://api.github.com/repos/json-c/json-c/tags
@@ -749,8 +681,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/ripose-jp/Memento.git
-        tag: v1.4.1
-        commit: 364e0354185d5e198f048b3d29f669a8307ccc20
+        tag: v1.5.0
+        commit: d039cbb07cda59310eb84f02c65d789612797ddc
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
