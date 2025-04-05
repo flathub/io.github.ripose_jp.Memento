@@ -522,8 +522,8 @@ modules:
         url: https://github.com/FFmpeg/FFmpeg.git
         mirror-urls:
           - https://git.ffmpeg.org/ffmpeg.git
-        commit: b08d7969c550a804a59511c7b83f2dd8cc0499b8
-        tag: n7.1
+        commit: db69d06eeeab4f46da15030a80d539efb4503ca8
+        tag: n7.1.1
         x-checker-data:
           type: git
           tag-pattern: ^n([\d.]{3,7})$
@@ -585,8 +585,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/mpv-player/mpv.git
-        tag: v0.39.0
-        commit: a0fba7be57f3822d967b04f0f6b6d6341e7516e7
+        tag: v0.40.0
+        commit: e48ac7ce08462f5e33af6ef9deeac6fa87eef01e
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
@@ -599,13 +599,13 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.11.2.tar.gz
-        sha256: 6b2a43837005e1c23fdfee532b78f806863e412d2089b9c42b49ab08cbcd7665
+        url: https://libzip.org/download/libzip-1.11.3.tar.gz
+        sha256: 76653f135dde3036036c500e11861648ffbf9e1fc5b233ff473c60897d9db0ea
         x-checker-data:
           type: anitya
           project-id: 10649
           stable-only: true
-          url-template: https://libzip.org/download/libzip-$version.tar.xz
+          url-template: https://libzip.org/download/libzip-$version.tar.gz
 
   - name: json-c
     buildsystem: cmake-ninja
@@ -667,8 +667,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/ripose-jp/Memento.git
-        tag: v1.5.0
-        commit: d039cbb07cda59310eb84f02c65d789612797ddc
+        tag: v1.6.0
+        commit: 3110c8e6c0d9ba0837454546896239e70044bf34
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
