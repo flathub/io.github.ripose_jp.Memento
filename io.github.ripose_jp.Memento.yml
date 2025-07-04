@@ -121,8 +121,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/LuaJIT/LuaJIT.git
-        mirror-urls:
-          - https://luajit.org/git/luajit.git
+        # mirror-urls:
+        #   - https://luajit.org/git/luajit.git
         disable-shallow-clone: true
         commit: f73e649a954b599fc184726c376476e7a5c439ca
       - type: shell
@@ -199,8 +199,8 @@ modules:
     sources:
       - type: git
         url: https://git.linuxtv.org/v4l-utils.git
-        mirror-urls:
-          - https://github.com/gjasny/v4l-utils.git
+        # mirror-urls:
+        #   - https://github.com/gjasny/v4l-utils.git
         tag: v4l-utils-1.30.1
         commit: 9bdabf8793f40e5df74435b2df94b5567b55805d
         x-checker-data:
@@ -234,10 +234,10 @@ modules:
     sources:
       - type: archive
         url: https://ftp.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.2.tar.bz2
-        mirror-urls:
-          - https://mirrors.kernel.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
-          - https://mirrors.ocf.berkeley.edu/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
-          - https://ftpmirror.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
+        # mirror-urls:
+        #   - https://mirrors.kernel.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
+        #   - https://mirrors.ocf.berkeley.edu/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
+        #   - https://ftpmirror.gnu.org/gnu/libcdio/libcdio-paranoia-10.2+2.0.1.tar.bz2
         sha256: 186892539dedd661276014d71318c8c8f97ecb1250a86625256abd4defbf0d0c
         x-checker-data:
           type: html
@@ -254,9 +254,9 @@ modules:
     sources:
       - type: archive
         url: https://download.videolan.org/pub/videolan/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
-        mirror-urls:
-          - https://videolan.mirror.ba/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
-          - https://videolan.c3sl.ufpr.br/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
+        # mirror-urls:
+        #   - https://videolan.mirror.ba/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
+        #   - https://videolan.c3sl.ufpr.br/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
         sha256: ce35454997a208cbe50e91232f0e73fb1ac3471965813a13b8730a8f18a15369
         x-checker-data:
           type: html
@@ -273,9 +273,9 @@ modules:
     sources:
       - type: archive
         url: https://download.videolan.org/pub/videolan/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
-        mirror-urls:
-          - https://videolan.mirror.ba/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
-          - https://videolan.c3sl.ufpr.br/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
+        # mirror-urls:
+        #   - https://videolan.mirror.ba/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
+        #   - https://videolan.c3sl.ufpr.br/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
         sha256: c191a7475947d323ff7680cf92c0fb1be8237701885f37656c64d04e98d18d48
         x-checker-data:
           type: html
@@ -294,9 +294,9 @@ modules:
       - sha256: a88aa0ebe4c98a77f7aeffd92ab3ef64ac548c6b822e8248a8b926725bea0a39
         type: archive
         url: https://download.videolan.org/pub/videolan/libaacs/0.11.1/libaacs-0.11.1.tar.bz2
-        mirror-urls:
-          - https://videolan.mirror.ba/libaacs/0.11.1/libaacs-0.11.1.tar.bz2
-          - https://videolan.c3sl.ufpr.br/libaacs/0.11.1/libaacs-0.11.1.tar.bz2
+        # mirror-urls:
+        #   - https://videolan.mirror.ba/libaacs/0.11.1/libaacs-0.11.1.tar.bz2
+        #   - https://videolan.c3sl.ufpr.br/libaacs/0.11.1/libaacs-0.11.1.tar.bz2
         x-checker-data:
           type: html
           url: https://www.videolan.org/developers/libaacs.html
@@ -314,9 +314,9 @@ modules:
       - sha256: 478ffd68a0f5dde8ef6ca989b7f035b5a0a22c599142e5cd3ff7b03bbebe5f2b
         type: archive
         url: https://download.videolan.org/pub/videolan/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
-        mirror-urls:
-          - https://videolan.mirror.ba/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
-          - https://videolan.c3sl.ufpr.br/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
+        # mirror-urls:
+        #   - https://videolan.mirror.ba/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
+        #   - https://videolan.c3sl.ufpr.br/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
         x-checker-data:
           type: html
           url: https://www.videolan.org/developers/libbluray.html
@@ -350,8 +350,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/breakfastquay/rubberband.git
-        mirror-urls:
-          - https://hg.sr.ht/~breakfastquay/rubberband
+        # mirror-urls:
+        #   - https://hg.sr.ht/~breakfastquay/rubberband
         tag: v4.0.0
         commit: 1d95888bec3ae0a17c0c4af791810d5a63f6bc35
         x-checker-data:
@@ -373,8 +373,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/ccxvii/mujs.git
-        mirror-urls:
-          - http://git.ghostscript.com/mujs.git
+        # mirror-urls:
+        #   - http://git.ghostscript.com/mujs.git
         tag: 1.3.7
         commit: 05cd646bad083ed45e9e1c9846ea671d461ced30
         x-checker-data:
@@ -391,8 +391,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/nv-codec-headers.git
-        mirror-urls:
-          - https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
+        # mirror-urls:
+        #   - https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
         tag: n13.0.19.0
         commit: e844e5b26f46bb77479f063029595293aa8f812d
         x-checker-data:
@@ -516,8 +516,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
-        mirror-urls:
-          - https://git.ffmpeg.org/ffmpeg.git
+        # mirror-urls:
+        #   - https://git.ffmpeg.org/ffmpeg.git
         commit: db69d06eeeab4f46da15030a80d539efb4503ca8
         tag: n7.1.1
         x-checker-data:
@@ -553,8 +553,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/haasn/libplacebo.git
-        mirror-urls:
-          - https://code.videolan.org/videolan/libplacebo.git
+        # mirror-urls:
+        #   - https://code.videolan.org/videolan/libplacebo.git
         tag: v7.351.0
         commit: 3188549fba13bbdf3a5a98de2a38c2e71f04e21e
         x-checker-data:
