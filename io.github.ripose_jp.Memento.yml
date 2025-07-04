@@ -413,7 +413,7 @@ modules:
         commit: 450946f96bb20ca3f71d494c0800c3ad747de769
 
   - name: x265
-    buildsystem: cmake
+    buildsystem: cmake-ninja
     subdir: source
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
@@ -432,7 +432,7 @@ modules:
           tag-pattern: ^([\d.]+)$
 
   - name: libmysofa
-    buildsystem: cmake
+    buildsystem: cmake-ninja
     config-opts:
       - -DBUILD_TESTS=OFF
     sources:
@@ -467,7 +467,7 @@ modules:
           - autoreconf -vif
 
   - name: libjxl
-    buildsystem: cmake
+    buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_TESTING=OFF
