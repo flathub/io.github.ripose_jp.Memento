@@ -28,9 +28,9 @@ cleanup:
 modules:
   - name: lmdb
     sources:
-      - sha256: dd70a8c67807b3b8532b3e987b0a4e998962ecc28643e1af5ec77696b081c9b0
+      - sha256: f3927859882eb608868c8c31586bb7eb84562a40a6bf5cc3e13b6b564641ea28
         type: archive
-        url: https://github.com/LMDB/lmdb/archive/refs/tags/LMDB_0.9.31.tar.gz
+        url: https://github.com/LMDB/lmdb/archive/LMDB_0.9.22.tar.gz
     make-install-args:
       - prefix=/app
     no-autogen: true
