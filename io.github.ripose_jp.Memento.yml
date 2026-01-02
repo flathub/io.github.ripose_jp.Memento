@@ -1,6 +1,6 @@
 app-id: io.github.ripose_jp.Memento
 runtime: org.kde.Platform
-runtime-version: 6.7
+runtime-version: 6.9
 sdk: org.kde.Sdk
 command: memento
 rename-desktop-file: memento.desktop
@@ -19,6 +19,8 @@ finish-args:
   - --filesystem=host:ro
   - --env=LC_NUMERIC=C
   - --filesystem=xdg-run/pipewire-0:ro
+  - --env=YT_DLP_JS_RUNTIME=deno
+
   - --talk-name=org.freedesktop.ScreenSaver
 
 cleanup:
@@ -70,8 +72,8 @@ modules:
     sources:
       - type: archive
         archive-type: tar
-        url: https://download.samba.org/pub/samba/stable/samba-4.21.2.tar.gz
-        sha256: bde66be3d2025cb949de38518ad2652f3795f824c7fa89d4e443ede1ae828ea6
+        url: https://download.samba.org/pub/samba/stable/samba-4.23.3.tar.gz
+        sha256: 06cdbb27a6956978b045455fe0696d998ffbac8d24ba24de87a4ef8200813320
         x-checker-data:
           type: html
           url: https://download.samba.org/pub/samba/stable/?C=M;O=D
@@ -105,8 +107,8 @@ modules:
     sources:
       - type: git
         url: https://gitlab.freedesktop.org/xorg/lib/libxpresent.git
-        tag: libXpresent-1.0.1
-        commit: 37507b5f44332accfb1064ee69a4f6a833994747
+        tag: libXpresent-1.0.2
+        commit: 4d92149372461bf575e8a09b1064a2884c38c3aa
         x-checker-data:
           type: git
           tag-pattern: ^libXpresent-([\d.]+)$
@@ -121,13 +123,50 @@ modules:
     sources:
       - type: git
         url: https://github.com/LuaJIT/LuaJIT.git
-        mirror-urls:
-          - https://luajit.org/git/luajit.git
         disable-shallow-clone: true
-        commit: f73e649a954b599fc184726c376476e7a5c439ca
+        commit: 7152e15489d2077cd299ee23e3d51a4c599ab14f
       - type: shell
         commands:
           - sed -i 's|/usr/local|/app|' ./Makefile
+
+  - name: deno
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 deno /app/bin/deno
+    sources:
+      # -------- x86_64 build --------
+      - type: file
+        only-arches:
+          - x86_64
+        url: https://github.com/denoland/deno/releases/download/v2.5.6/deno-x86_64-unknown-linux-gnu.zip
+        sha256: fd4f6abc1b6a134fa9a4dba56519f1631f44c88e04e4e3e9a8ff5975dfa66e1a
+        dest-filename: deno.zip
+
+      # -------- aarch64 build --------
+      - type: file
+        only-arches:
+          - aarch64
+        url: https://github.com/denoland/deno/releases/download/v2.5.6/deno-aarch64-unknown-linux-gnu.zip
+        sha256: f5e60ae3dfceb61e5e5a41f22129e40a8bc17f6393b59e75d7ca19ceef32d824
+        dest-filename: deno.zip
+
+      # -------- unpack the zip --------
+      - type: shell
+        commands:
+          - unzip deno.zip
+
+  - name: yt-dlp-ejs
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=/app yt_dlp_ejs*.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/9d/0d/1f0d7a735ca60b87953271b15d00eff5eef05f6118390ddf6f81982526ed/yt_dlp_ejs-0.3.2-py3-none-any.whl
+        sha256: f2dc6b3d1b909af1f13e021621b0af048056fca5fb07c4db6aa9bbb37a4f66a9
+        x-checker-data:
+          type: pypi
+          name: yt-dlp-ejs
+          packagetype: bdist_wheel
 
   - name: yt-dlp
     no-autogen: true
@@ -139,8 +178,8 @@ modules:
       - install yt-dlp /app/bin
     sources:
       - type: archive
-        url: https://github.com/yt-dlp/yt-dlp/releases/download/2024.12.23/yt-dlp.tar.gz
-        sha256: 66a5b9e0988106a3131ce40f61f04af3eb49cde4d26dd292793ad18666cc5938
+        url: https://github.com/yt-dlp/yt-dlp/releases/download/2025.12.08/yt-dlp.tar.gz
+        sha256: 9814ae7dd4118a80a6104399d4984e355d2a71f78e6bbc48137a5b299eddcbaf
         x-checker-data:
           type: json
           url: https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest
@@ -152,6 +191,9 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_STATIC=0
+      - -DCMAKE_INSTALL_LIBDIR=lib
+      # TODO can be removed when updating to uchardet > 0.0.8
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     cleanup:
       - /bin
       - /include
@@ -179,34 +221,35 @@ modules:
     sources:
       - type: git
         url: https://github.com/libass/libass.git
-        tag: 0.17.3
-        commit: e46aedea0a0d17da4c4ef49d84b94a7994664ab5
+        tag: 0.17.4
+        commit: bbb3c7f1570a4a021e52683f3fbdf74fe492ae84
         x-checker-data:
           type: git
           tag-pattern: ^(\d\.\d{1,3}\.\d{1,2})$
 
-  - name: libv4l2
-    buildsystem: meson
-    cleanup:
-      - /include
-      - /lib/pkgconfig
-      - /share/man
-    config-opts:
-      - -Ddoxygen-html=false
-      - -Ddoxygen-doc=disabled
-      - -Dbpf=disabled
-      - -Dudevdir=/app/lib/udev
-    sources:
-      - type: git
-        url: https://git.linuxtv.org/v4l-utils.git
-        mirror-urls:
-          - https://github.com/gjasny/v4l-utils.git
-        tag: v4l-utils-1.26.1
-        commit: 4aee01a027923cab1e40969f56f8ba58d3e6c0d1
-        x-checker-data:
-          type: git
-          tag-pattern: ^v4l-utils-([\d.]+)$
-
+#  - name: libv4l2
+#    buildsystem: meson
+#    config-opts:
+#      - --libdir=lib
+#      - -Ddoxygen-html=false
+#      - -Ddoxygen-doc=disabled
+#      - -Dbpf=disabled
+#      - -Dudevdir=/app/lib/udev
+#    cleanup:
+#      - /include
+#      - /lib/pkgconfig
+#      - /share/man
+#    sources:
+#      - type: git
+#        url: https://git.linuxtv.org/v4l-utils.git
+#        mirror-urls:
+#          - https://github.com/gjasny/v4l-utils.git
+#        tag: v4l-utils-1.28.1
+#        commit: fc15e229d9d337e46d730f00647821adbbd58548
+#        x-checker-data:
+#          type: git
+#          tag-pattern: ^v4l-utils-([\d.]+)$
+#
   - name: libcdio
     config-opts:
       - --disable-static
@@ -250,42 +293,55 @@ modules:
           url-template: https://ftp.gnu.org/gnu/libcdio/libcdio-paranoia-$version.tar.bz2
 
   - name: libdvdread
+    buildsystem: meson
     config-opts:
-      - --disable-static
+      - --libdir=lib
     cleanup:
       - /include
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://download.videolan.org/pub/videolan/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
-        mirror-urls:
-          - https://videolan.mirror.ba/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
-          - https://videolan.c3sl.ufpr.br/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
-        sha256: ce35454997a208cbe50e91232f0e73fb1ac3471965813a13b8730a8f18a15369
+        url: https://download.videolan.org/pub/videolan/libdvdread/7.0.1/libdvdread-7.0.1.tar.xz
+        sha256: 2e3e04a305c15c3963aa03ae1b9a83c1d239880003fcf3dde986d3943355d407
         x-checker-data:
           type: html
           url: https://www.videolan.org/developers/libdvdnav.html
           version-pattern: The latest version of <code>libdvdread</code> is <b>([\d\-\.]+)<
-          url-template: https://download.videolan.org/pub/videolan/libdvdread/$version/libdvdread-$version.tar.bz2
+          url-template: https://download.videolan.org/pub/videolan/libdvdread/$version/libdvdread-$version.tar.xz
 
   - name: libdvdnav
+    buildsystem: meson
     config-opts:
-      - --disable-static
+      - --libdir=lib
     cleanup:
       - /include
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://download.videolan.org/pub/videolan/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
-        mirror-urls:
-          - https://videolan.mirror.ba/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
-          - https://videolan.c3sl.ufpr.br/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
-        sha256: c191a7475947d323ff7680cf92c0fb1be8237701885f37656c64d04e98d18d48
+        url: https://download.videolan.org/pub/videolan/libdvdnav/7.0.0/libdvdnav-7.0.0.tar.xz
+        sha256: a2a18f5ad36d133c74bf9106b6445806fa253b09141a46392550394b647b221e
         x-checker-data:
           type: html
           url: https://www.videolan.org/developers/libdvdnav.html
           version-pattern: The latest version of <code>libdvdnav</code> is <b>([\d\-\.]+)</b>\.
-          url-template: https://download.videolan.org/pub/videolan/libdvdnav/$version/libdvdnav-$version.tar.bz2
+          url-template: https://download.videolan.org/pub/videolan/libdvdnav/$version/libdvdnav-$version.tar.xz
+
+  # libgcrypt-1.10.3 build fails with freedeskop 24.08
+  - name: libgcrypt
+    config-opts:
+      - --disable-static
+      - --disable-doc
+    sources:
+      - type: git
+        url: https://dev.gnupg.org/source/libgcrypt.git
+        tag: libgcrypt-1.10.3
+        commit: aa1610866f8e42bdc272584f0a717f32ee050a22
+        # disabled for libgcrypt-1.11 because of build fail
+        #x-checker-data:
+        #  type: anitya
+        #  project-id: 1623
+        #  stable-only: true
+        #  tag-template: libgcrypt-$version
 
   - name: libaacs
     config-opts:
@@ -308,24 +364,25 @@ modules:
           url-template: https://download.videolan.org/pub/videolan/libaacs/$version/libaacs-$version.tar.bz2
 
   - name: libbluray
+    buildsystem: meson
     config-opts:
-      - --disable-static
-      - --disable-bdjava-jar
+      - --libdir=lib
+      - -Dbdj_jar=disabled
     cleanup:
       - /include
       - /lib/pkgconfig
     sources:
-      - sha256: 478ffd68a0f5dde8ef6ca989b7f035b5a0a22c599142e5cd3ff7b03bbebe5f2b
+      - sha256: 77937baf07eadda4b2b311cf3af4c50269d2ea3165041f5843d96476c4c92777
         type: archive
-        url: https://download.videolan.org/pub/videolan/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
+        url: https://download.videolan.org/pub/videolan/libbluray/1.4.0/libbluray-1.4.0.tar.xz
         mirror-urls:
-          - https://videolan.mirror.ba/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
-          - https://videolan.c3sl.ufpr.br/libbluray/1.3.4/libbluray-1.3.4.tar.bz2
+          - https://videolan.mirror.ba/libbluray/1.4.0/libbluray-1.4.0.tar.xz
+          - https://videolan.c3sl.ufpr.br/libbluray/1.4.0/libbluray-1.4.0.tar.xz
         x-checker-data:
           type: html
           url: https://www.videolan.org/developers/libbluray.html
           version-pattern: Latest release is <b>libbluray (\d\.\d+\.?\d*)</b>\.
-          url-template: https://download.videolan.org/pub/videolan/libbluray/$version/libbluray-$version.tar.bz2
+          url-template: https://download.videolan.org/pub/videolan/libbluray/$version/libbluray-$version.tar.xz
 
   - name: zimg
     config-opts:
@@ -337,8 +394,8 @@ modules:
     sources:
       - type: archive
         archive-type: tar
-        url: https://api.github.com/repos/sekrit-twc/zimg/tarball/release-3.0.5
-        sha256: 1b8998f03f4a49e4d730033143722b32bc28a5306ef809ccfb3b4bbb29e4b784
+        url: https://api.github.com/repos/sekrit-twc/zimg/tarball/release-3.0.6
+        sha256: 15140e491c4ce9db5f02a038d8a1eb53e9151b55eeed06a2899425a6ebfef367
         x-checker-data:
           type: json
           url: https://api.github.com/repos/sekrit-twc/zimg/releases/latest
@@ -346,16 +403,72 @@ modules:
           version-query: .tag_name | sub("^release-"; "")
           timestamp-query: .published_at
 
+  - name: Tesseract
+    config-opts:
+      - --disable-static
+    modules:
+      - name: Leptonica
+        config-opts:
+          - --disable-static
+          - --with-pic
+        sources:
+          - type: archive
+            url: http://www.leptonica.org/source/leptonica-1.86.0.tar.gz
+            sha256: 1fa08e40bb37fd45802d5e6e7b43927449a5c47d4608ef99d3bd3f0fa76baedc
+            x-checker-data:
+              type: anitya
+              project-id: 1549
+              stable-only: true
+              url-template: http://www.leptonica.org/source/leptonica-$version.tar.gz
+        cleanup:
+          - /bin
+    sources:
+      - type: git
+        url: https://github.com/tesseract-ocr/tesseract.git
+        tag: 5.5.1
+        commit: 3b7c70e34dea179549ed3e995872e2e019eb8477
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/tesseract-ocr/tesseract/releases/latest
+          timestamp-query: .published_at
+          tag-query: .tag_name
+          version-query: .tag_name
+    cleanup:
+      - /bin
+
+  - name: ImageMagick
+    config-opts:
+      - --disable-static
+      - --disable-docs
+      - --with-hdri
+      - --with-pic
+    sources:
+      - type: archive
+        url: https://github.com/ImageMagick/ImageMagick/archive/7.1.2-10.tar.gz
+        sha256: 122c961331044844141aef59f050e2bb3a0c89833c613950770d3672c4f2e4e8
+        x-checker-data:
+          type: anitya
+          project-id: 1372
+          stable-only: true
+          url-template: https://github.com/ImageMagick/ImageMagick/archive/$version.tar.gz
+    cleanup:
+      - /bin
+      - /etc
+      - /lib/ImageMagick*
+      - /share/ImageMagick*
+
   - name: rubberband
     buildsystem: meson
+    config-opts:
+      - --libdir=lib
     cleanup:
       - /include
       - /lib/pkgconfig
     sources:
       - type: git
         url: https://github.com/breakfastquay/rubberband.git
-        mirror-urls:
-          - https://hg.sr.ht/~breakfastquay/rubberband
+        #mirror-urls:
+        #  - https://hg.sr.ht/~breakfastquay/rubberband
         tag: v4.0.0
         commit: 1d95888bec3ae0a17c0c4af791810d5a63f6bc35
         x-checker-data:
@@ -377,14 +490,15 @@ modules:
     sources:
       - type: git
         url: https://github.com/ccxvii/mujs.git
-        mirror-urls:
-          - http://git.ghostscript.com/mujs.git
-        tag: 1.3.5
-        commit: 0df0707f2f10187127e36acfbc3ba9b9ca5b5cf0
-        x-checker-data:
-          type: git
-          url: https://api.github.com/repos/ccxvii/mujs/tags
-          tag-pattern: ^([\d.]+)$
+        #mirror-urls:
+        #  - http://git.ghostscript.com/mujs.git
+        tag: 1.3.6
+        commit: cc569c5fa9a7a2498177693b5617605c2ff5b260
+        # failing build for 1.3.7
+        #x-checker-data:
+        #  type: git
+        #  url: https://api.github.com/repos/ccxvii/mujs/tags
+        #  tag-pattern: ^([\d.]+)$
 
   - name: nv-codec-headers
     cleanup:
@@ -395,10 +509,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/nv-codec-headers.git
-        mirror-urls:
-          - https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
-        tag: n12.2.72.0
-        commit: c69278340ab1d5559c7d7bf0edf615dc33ddbba7
+        tag: n13.0.19.0
+        commit: e844e5b26f46bb77479f063029595293aa8f812d
         x-checker-data:
           type: git
           tag-pattern: ^n([\d.]+)$
@@ -414,14 +526,17 @@ modules:
     sources:
       - type: git
         url: https://code.videolan.org/videolan/x264.git
-        commit: 450946f96bb20ca3f71d494c0800c3ad747de769
+        commit: b35605ace3ddf7c1a5d67a2eb553f034aef41d55
 
   - name: x265
     buildsystem: cmake
     subdir: source
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_LIBDIR=lib
       - -DBUILD_STATIC=0
+      # TODO can be removed when updating to x265 > 4.1
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     cleanup:
       - /include
       - /lib/pkgconfig
@@ -431,13 +546,20 @@ modules:
         url: https://bitbucket.org/multicoreware/x265_git.git
         tag: '4.0'
         commit: 6318f223684118a2c71f67f3f4633a9e35046b00
-        x-checker-data:
-          type: git
-          tag-pattern: ^([\d.]+)$
+        # build is failing with 4.1 will enable with 4.2
+        #x-checker-data:
+        #  type: git
+        #  tag-pattern: ^([\d.]+)$
+
+      # fix cmake build issue
+      # https://bitbucket.org/multicoreware/x265_git/commits/b354c009a60bcd6d7fc04014e200a1ee9c45c167
+      - type: patch
+        path: patches/x265-cmake_policy.patch
 
   - name: libmysofa
     buildsystem: cmake
     config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=lib
       - -DBUILD_TESTS=OFF
     sources:
       - type: git
@@ -465,25 +587,34 @@ modules:
           url: https://sourceforge.net/projects/bs2b/files/libbs2b/
           version-pattern: projects/bs2b/files/libbs2b/(\d+\.\d+\.\d+)
           url-template: https://downloads.sourceforge.net/sourceforge/bs2b/libbs2b-$version.tar.gz
+      # https://src.fedoraproject.org/rpms/libbs2b/blob/rawhide/f/libbs2b.spec#_40
       - type: shell
         commands:
           - sed -i -e 's/lzma/xz/g' configure.ac
           - autoreconf -vif
 
-  - name: libjxl
-    buildsystem: cmake
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DBUILD_TESTING=OFF
-    sources:
-      - type: git
-        url: https://github.com/libjxl/libjxl.git
-        tag: v0.11.1
-        commit: 794a5dcf0d54f9f0b20d288a12e87afb91d20dfc
-        disable-shallow-clone: true
-        x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
+#  - name: libjxl
+#    buildsystem: cmake
+#    config-opts:
+#      - -DCMAKE_BUILD_TYPE=Release
+#      - -DCMAKE_INSTALL_LIBDIR=lib
+#      - -DBUILD_TESTING=OFF
+#    sources:
+#      - type: git
+#        url: https://github.com/libjxl/libjxl.git
+#        tag: v0.11.0
+#        commit: 4df1e9eccdf86b8df4c0c7c08f529263906f9c4f
+#        disable-shallow-clone: true
+#        x-checker-data:
+#          type: git
+#          tag-pattern: ^v([\d.]+)$
+
+#  - name: vulkan-headers
+#    buildsystem: cmake-ninja
+#    sources:
+#      - type: archive
+#        url: https://github.com/KhronosGroup/Vulkan-Headers/archive/v1.3.286.tar.gz
+#        sha256: a82a6982efe5e603e23505ca19b469e8f3d876fc677c46b7bfb6177f517bf8fe
 
   - name: ffmpeg
     cleanup:
@@ -517,27 +648,33 @@ modules:
       - --enable-libwebp
       - --enable-libsmbclient
       - --enable-libxml2
+      - --enable-vulkan
+      - --enable-libdrm
+      - --enable-vaapi
+
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
-        mirror-urls:
-          - https://git.ffmpeg.org/ffmpeg.git
-        commit: db69d06eeeab4f46da15030a80d539efb4503ca8
-        tag: n7.1.1
+        #mirror-urls:
+        #  - https://git.ffmpeg.org/ffmpeg.git
+        commit: 894da5ca7d742e4429ffb2af534fcda0103ef593
+        tag: n8.0.1
         x-checker-data:
           type: git
           tag-pattern: ^n([\d.]{3,7})$
 
   - name: libsixel
     buildsystem: meson
+    config-opts:
+      - --libdir=lib
     cleanup:
       - /include
       - /lib/pkgconfig
     sources:
       - type: archive
         archive-type: tar
-        url: https://api.github.com/repos/libsixel/libsixel/tarball/refs/tags/v1.10.3
-        sha256: 7be774befba882d53701e131b6657836118f6cdb15a7515f92345c7bb6e2bb5c
+        url: https://api.github.com/repos/libsixel/libsixel/tarball/refs/tags/v1.10.5
+        sha256: 402da9e24caea62fe1e4c5d6f9c9211141f7a5d8016e717527ecde10c5522344
         x-checker-data:
           type: json
           url: https://api.github.com/repos/libsixel/libsixel/tags
@@ -547,36 +684,147 @@ modules:
   - name: libplacebo
     buildsystem: meson
     config-opts:
-      - -Dopengl=enabled
-      - -Dvulkan=disabled
-      - -Dshaderc=disabled
-      - -Dglslang=disabled
+      - -Dvulkan=enabled
+      - -Dshaderc=enabled
+      - --libdir=lib
     cleanup:
       - /include
       - /lib/pkgconfig
     sources:
       - type: git
         url: https://github.com/haasn/libplacebo.git
-        mirror-urls:
-          - https://code.videolan.org/videolan/libplacebo.git
+        #mirror-urls:
+        #  - https://code.videolan.org/videolan/libplacebo.git
         tag: v7.349.0
         commit: 1fd3c7bde7b943fe8985c893310b5269a09b46c5
-        x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
+        # Disabled libplacebo update above v7.349.0, though it compiles, but videos do not play/work with freedesktop sdk 24.08 due to vulkan 1.0; perhaps 25.08 may work.
+        #x-checker-data:
+        #  type: git
+        #  tag-pattern: ^v([\d.]+)$
+
+      # fix python error: TypeError: expected an Element, not ElementTree
+      # https://code.videolan.org/videolan/libplacebo/-/commit/12509c0f1ee8c22ae163017f0a5e7b8a9d983a17
+      - type: patch
+        path: patches/libplacebo-vulkan-utils_gen-python.patch
+
+## The following not needed as of freedesktop 24.08
+#    modules:
+#      - name: shaderc
+#        buildsystem: cmake-ninja
+#        builddir: true
+#        config-opts:
+#          - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
+#          - -DSHADERC_SKIP_EXAMPLES=ON
+#          - -DSHADERC_SKIP_TESTS=ON
+#          - -DSPIRV_SKIP_EXECUTABLES=ON
+#          - -DENABLE_GLSLANG_BINARIES=OFF
+#        cleanup:
+#          - /bin
+#          - /include
+#          - /lib/cmake
+#          - /lib/pkgconfig
+#        sources:
+#          - type: git
+#            url: https://github.com/google/shaderc.git
+#            #tag: v2023.7
+#            commit: 40bced4e1e205ecf44630d2dfa357655b6dabd04
+#            #x-checker-data:
+#            #  type: git
+#            #  tag-pattern: ^v(\d{4}\.\d{1,2})$
+#          - type: git
+#            url: https://github.com/KhronosGroup/SPIRV-Tools.git
+#            tag: v2024.1
+#            commit: 04896c462d9f3f504c99a4698605b6524af813c1
+#            dest: third_party/spirv-tools
+#            #x-checker-data:
+#            #  type: git
+#            #  tag-pattern: ^v(\d{4}\.\d{1})$
+#          - type: git
+#            url: https://github.com/KhronosGroup/SPIRV-Headers.git
+#            #tag: sdk-1.3.250.1
+#            commit: 4f7b471f1a66b6d06462cd4ba57628cc0cd087d7
+#            dest: third_party/spirv-headers
+#             x-checker-data:
+#               type: git
+#               tag-pattern: ^sdk-([\d.]+)$
+#          - type: git
+#            url: https://github.com/KhronosGroup/glslang.git
+#            tag: 15.0.0
+#            commit: 46ef757e048e760b46601e6e77ae0cb72c97bd2f
+#            dest: third_party/glslang
+#            x-checker-data:
+#              type: git
+#              tag-pattern: ^(\d{1,2}\.\d{1,2}\.\d{1,4})$
+
+  - name: hwdata
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://github.com/vcrhonek/hwdata/archive/refs/tags/v0.394.tar.gz
+        sha256: b7c3fd7214a3b7c49d2661db127a712dc11cffd1799f793947aa1cb20aaf3298
+
+  - name: libdisplay-info
+    buildsystem: meson
+    config-opts:
+      - --libdir=lib
+    sources:
+      - type: archive
+        url: https://gitlab.freedesktop.org/emersion/libdisplay-info/-/archive/0.2.0/libdisplay-info-0.2.0.tar.gz
+        sha256: f7331fcaf5527251b84c8fb84238d06cd2f458422ce950c80e86c72927aa8c2b
 
   - name: mpv
     buildsystem: meson
     config-opts:
+      - --libdir=lib
+      - -Dalsa=enabled
       - -Dbuild-date=false
-      - -Dlibmpv=true
-      - -Dmanpage-build=disabled
       - -Dcdda=enabled
+      - -Dcplayer=true
+      - -Dcplugins=enabled
+      - -Dcuda-hwaccel=enabled
+      - -Dcuda-interop=enabled
+      - -Ddmabuf-wayland=enabled
+      - -Ddrm=enabled
       - -Ddvbin=enabled
       - -Ddvdnav=enabled
+      - -Degl-drm=enabled
+      - -Degl-wayland=enabled
+      - -Degl-x11=enabled
+      - -Degl=enabled
+      - -Dgbm=enabled
+      - -Dgl-x11=enabled
+      - -Dgl=enabled
+      - -Diconv=enabled
+      - -Djack=enabled
+      - -Djavascript=enabled
+      - -Djpeg=enabled
+      - -Dlcms2=enabled
       - -Dlibarchive=enabled
-      - -Dsdl2=enabled
+      - -Dlibavdevice=enabled
+      - -Dlibbluray=enabled
+      - -Dlibmpv=true
+      - -Dlua=enabled
+      - -Dmanpage-build=disabled
+      - -Dopenal=enabled
+      - -Dpipewire=enabled
+      - -Dplain-gl=enabled
+      - -Dpulse=enabled
+      - -Drubberband=enabled
+      - -Duchardet=enabled
+      - -Dvaapi-drm=enabled
+      - -Dvaapi-wayland=enabled
+      - -Dvaapi-x11=enabled
+      - -Dvaapi=enabled
+      - -Dvdpau-gl-x11=enabled
+      - -Dvdpau=enabled
+      - -Dvector=enabled
       - -Dvulkan=disabled
+      - -Dwayland=enabled
+      - -Dwerror=false
+      - -Dx11=enabled
+      - -Dxv=enabled
+      - -Dzimg=enabled
+      - -Dzlib=enabled
     cleanup:
       - /bin
       - /include
@@ -585,22 +833,23 @@ modules:
     sources:
       - type: git
         url: https://github.com/mpv-player/mpv.git
-        tag: v0.40.0
-        commit: e48ac7ce08462f5e33af6ef9deeac6fa87eef01e
+        tag: v0.41.0
+        commit: 41f6a645068483470267271e1d09966ca3b9f413
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
 
   - name: libzip
     buildsystem: cmake-ninja
-    cleanup:
-      - /include
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DCMAKE_INSTALL_LIBDIR=lib
+    cleanup:
+      - /include
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.11.3.tar.gz
-        sha256: 76653f135dde3036036c500e11861648ffbf9e1fc5b233ff473c60897d9db0ea
+        url: https://libzip.org/download/libzip-1.11.4.tar.gz
+        sha256: 82e9f2f2421f9d7c2466bbc3173cd09595a88ea37db0d559a9d0a2dc60dc722e
         x-checker-data:
           type: anitya
           project-id: 10649
@@ -609,10 +858,11 @@ modules:
 
   - name: json-c
     buildsystem: cmake-ninja
-    cleanup:
-      - /include
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DCMAKE_INSTALL_LIBDIR=lib
+    cleanup:
+      - /include
     sources:
       - type: git
         url: https://github.com/json-c/json-c.git
@@ -625,12 +875,12 @@ modules:
 
   - name: mecab
     buildsystem: autotools
+    config-opts:
+      - --with-charset=utf-8
     cleanup:
       - /bin
       - /include
       - /libexec/mecab/mecab-*
-    config-opts:
-      - --with-charset=utf-8
     sources:
       - type: archive
         archive-type: tar
@@ -642,12 +892,12 @@ modules:
 
   - name: mecab-ipadic
     buildsystem: autotools
+    config-opts:
+      - --with-charset=utf-8
     cleanup:
       - /bin
       - /include
       - /libexec/mecab/mecab-*
-    config-opts:
-      - --with-charset=utf-8
     sources:
       - type: archive
         archive-type: tar
@@ -657,18 +907,39 @@ modules:
         commands:
           - cp -p /usr/share/automake-*/config.{sub,guess} .
 
+  - name: qcoro
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DCMAKE_INSTALL_LIBDIR=lib
+      - -DQCORO_BUILD_EXAMPLES=OFF
+      - -DQCORO_BUILD_TESTING=OFF
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+    sources:
+      - type: git
+        url: https://github.com/qcoro/qcoro.git
+        tag: v0.12.0
+        commit: ef1231ae490465b4f592ca326eee6d56a3d802ae
+        x-checker-data:
+          type: git
+          tag-pattern: ^v([\d.]+)$
+
   - name: memento
     buildsystem: cmake-ninja
     builddir: true
     config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=lib
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DRELEASE_BUILD=ON
+      - -DSYSTEM_QCORO=ON
       - -DMECAB_SUPPORT=ON
     sources:
       - type: git
         url: https://github.com/ripose-jp/Memento.git
-        tag: v1.6.0
-        commit: 3110c8e6c0d9ba0837454546896239e70044bf34
+        tag: v1.7.0
+        commit: 97641345edd319dbd6ec9b2c989fe2fe701554b4
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
