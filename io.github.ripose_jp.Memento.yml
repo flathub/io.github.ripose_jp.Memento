@@ -907,25 +907,6 @@ modules:
         commands:
           - cp -p /usr/share/automake-*/config.{sub,guess} .
 
-  - name: qcoro
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DCMAKE_INSTALL_LIBDIR=lib
-      - -DQCORO_BUILD_EXAMPLES=OFF
-      - -DQCORO_BUILD_TESTING=OFF
-    cleanup:
-      - /include
-      - /lib/pkgconfig
-    sources:
-      - type: git
-        url: https://github.com/qcoro/qcoro.git
-        tag: v0.12.0
-        commit: ef1231ae490465b4f592ca326eee6d56a3d802ae
-        x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
-
   - name: memento
     buildsystem: cmake-ninja
     builddir: true
