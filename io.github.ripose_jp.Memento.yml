@@ -717,21 +717,20 @@ modules:
     builddir: true
     config-opts:
       - -DCMAKE_INSTALL_LIBDIR=lib
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DRELEASE_BUILD=ON
-      - -DSYSTEM_QCORO=ON
-      - -DMECAB_SUPPORT=ON
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DMEMENTO_RELEASE_BUILD=ON
+      - -DMEMENTO_QAPPLICATION=ON
+      - -DMEMENTO_SYSTEM_QCORO=ON
+      - -DMEMENTO_MECAB_SUPPORT=ON
     post-install:
       - install -Dm644 $FLATPAK_BUILDER_BUILDDIR/$FLATPAK_ID.metainfo.xml -t /app/share/metainfo/
     sources:
       - type: git
         url: https://github.com/ripose-jp/Memento.git
-        tag: v1.7.2
-        commit: 07b4742a53e44e5f8fd17fdfc5678a6bf735f03e
+        tag: v2.0.0
+        commit: a607647cef3be0c38557abeba7b63fce8014097f
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
       - type: file
         path: io.github.ripose_jp.Memento.metainfo.xml
-      - type: patch
-        path: patches/memento-fix-screensaver.patch
