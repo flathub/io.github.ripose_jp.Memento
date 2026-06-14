@@ -18,7 +18,7 @@ Japanese easier with a built in popup dictionary, Anki integration, and more.
   </p>
   <p>Features:</p>
   <ul>
-   <li>Memento uses Yomichan's dictionary format and supports all the same dictionaries</li>
+   <li>Memento uses Yomitan's dictionary format and supports all the same dictionaries</li>
    <li>Automates Anki card creation through AnkiConnect</li>
    <li>Grammar aware search matches terms in subtitles regardless of most inflections</li>
    <li>Supports mpv plugins, upscalers, and shaders</li>
@@ -27,7 +27,7 @@ Japanese easier with a built in popup dictionary, Anki integration, and more.
   </ul>
  </description>
  <releases>
-  <release date="2026-01-31" version="1.7.2" url="https://github.com/ripose-jp/Memento/commits/master/linux/flatpak">
+  <release date="2026-06-13" version="2.0.0" url="https://github.com/ripose-jp/Memento/commits/master/linux/flatpak">
   </release>
  </releases>
  <screenshots>
