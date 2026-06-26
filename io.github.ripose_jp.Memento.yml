@@ -727,8 +727,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/ripose-jp/Memento.git
-        tag: v2.0.0
-        commit: a607647cef3be0c38557abeba7b63fce8014097f
+        tag: v2.0.1
+        commit: 14209c99429399cf241fec7a2941741bac5fe7c5
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
